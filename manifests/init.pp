@@ -13,7 +13,7 @@
 class awsutils (
   $ec2_api_tools = 'ec2-api-tools.zip',
   $ec2_ami_tools = 'ec2-ami-tools.zip',
-  $download_url  = 'http://puppetmaster01.iaistg.quadanalytix.com',
+  $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
   $dest_path     = '/opt/aws'
   ) {
   
