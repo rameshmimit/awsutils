@@ -2,19 +2,24 @@
 #
 # This module manages awsutils
 #
-# Parameters: none
+# Parameters:
+#  $ec2_api_tools = 'ec2-api-tools.zip',
+#  $ec2_ami_tools = 'ec2-ami-tools.zip',
+#  $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
+#  $dest_path     = '/opt/aws',
 #
 # Actions:
 #
 # Requires: see Modulefile
 #
-# Sample Usage:
+# Sample Usage: include awsutils 
+# 
 #
 class awsutils (
   $ec2_api_tools = 'ec2-api-tools.zip',
   $ec2_ami_tools = 'ec2-ami-tools.zip',
   $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
-  $dest_path     = '/opt/aws'
+  $dest_path     = '/opt/aws',
   ) {
   
   $ec2_api_tools_source="$download_url/$ec2_api_tools"
@@ -31,7 +36,6 @@ class awsutils (
     cwd     => "/tmp/",
     command => "touch /tmp/placehodler && wget $ec2_api_tools_source $ec2_ami_tools_source && unzip 'ec2-*-tools.zip' && rm -rf 'ec2-*-tools.zip' && mv ec2-a* $dest_path",
     onlyif  => ["test  ! -f /tmp/placehodler"],
-    #notify => Exec["install heroku"], # Point to an exec which will run install.sh
   }
   file { "$dest_path/apitools":
     ensure  => link,
