@@ -3,25 +3,32 @@
 # This module install amazon apitools and amitools.
 #
 # Parameters:
-#  $ec2_api_tools = 'ec2-api-tools.zip',
-#  $ec2_ami_tools = 'ec2-ami-tools.zip',
-#  $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
-#  $dest_path     = '/opt/aws',
+#  $ec2_api_tools  = 'ec2-api-tools.zip',
+#  $ec2_ami_tools  = 'ec2-ami-tools.zip',
+#  $download_url   = 'http://s3.amazonaws.com/ec2-downloads/',
+#  $dest_path      = '/opt/aws',
+#  $aws_access_key = 'BKLJJVVVCC444574F4CIN'
+#  $aws_access_key = 'Abcdde34567890ksjhdanska45jk'
 #
 # Requires: see Modulefile
 #
 # Sample Usage: include awsutils
 #
 class awsutils (
-  $ec2_api_tools = 'ec2-api-tools.zip',
-  $ec2_ami_tools = 'ec2-ami-tools.zip',
-  $download_url  = 'http://puppetmaster01.iaistg.quadanalytix.com',
-  $dest_path     = '/opt/aws',
+  $ec2_api_tools  = $awsutils::params::ec2_api_tools,
+  $ec2_ami_tools  = $awsutils::params::ec2_ami_tools,
+  $download_url   = $awsutils::params::download_url,
+  $dest_path      = $awsutils::params::dest_path,
+  $aws_access_key = $awsutils::params::aws_access_key,
+  $aws_secret_key = $awsutils::params::aws_secret_key,
   ) {
 
   $ec2_api_tools_source="$::download_url/$ec2_api_tools"
   $ec2_ami_tools_source="$::download_url/$ec2_ami_tools"
 
+  package { 'java-1.7.0-openjdk':
+    ensure => installed,
+  } 
   file { "$dest_path":
     ensure => directory,
     owner  => 'root',
@@ -32,7 +39,7 @@ class awsutils (
     path    => "/usr/local/bin:/bin:/usr/bin",
     cwd     => "/tmp/",
     command => "touch /tmp/placehodler && wget $ec2_api_tools_source $ec2_ami_tools_source && unzip 'ec2-*-tools.zip' && rm -rf 'ec2-*-tools.zip' && mv ec2-a* $dest_path",
-    onlyif  => ["test  ! -f /tmp/placehodler"],
+    onlyif  => ["test  ! -f /tmp/aws_placehodler"],
   }
   file { "$dest_path/apitools":
     ensure  => link,
@@ -48,6 +55,6 @@ class awsutils (
     mode    => '0644',
     owner   => 'root',
     group   => 'root',
-    content => "PATH=\$PATH:$dest_path/apitools/bin:$dest_path/amitools/bin",
+    content => template('awsutils/awsutils-path.erb'),
   }
 }
