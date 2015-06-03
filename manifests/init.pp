@@ -1,6 +1,6 @@
 # Class: awsutils
 #
-# This module manages awsutils
+# This module install amazon apitools and amitools.
 #
 # Parameters:
 #  $ec2_api_tools = 'ec2-api-tools.zip',
@@ -8,27 +8,24 @@
 #  $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
 #  $dest_path     = '/opt/aws',
 #
-# Actions:
-#
 # Requires: see Modulefile
 #
-# Sample Usage: include awsutils 
-# 
+# Sample Usage: include awsutils
 #
 class awsutils (
   $ec2_api_tools = 'ec2-api-tools.zip',
   $ec2_ami_tools = 'ec2-ami-tools.zip',
-  $download_url  = 'http://s3.amazonaws.com/ec2-downloads/',
+  $download_url  = 'http://puppetmaster01.iaistg.quadanalytix.com',
   $dest_path     = '/opt/aws',
   ) {
-  
-  $ec2_api_tools_source="$download_url/$ec2_api_tools"
-  $ec2_ami_tools_source="$download_url/$ec2_ami_tools"
-  
+
+  $ec2_api_tools_source="$::download_url/$ec2_api_tools"
+  $ec2_ami_tools_source="$::download_url/$ec2_ami_tools"
+
   file { "$dest_path":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
   exec { "get_aws_utils":
@@ -50,7 +47,7 @@ class awsutils (
   file { '/etc/profile.d/awsutils-path.sh':
     mode    => '0644',
     owner   => 'root',
-     group  => 'root',
-    content => "PATH=$PATH:$dest_path/apitools/bin:$dest_path/amitools/bin",
+    group   => 'root',
+    content => "PATH=\$PATH:$dest_path/apitools/bin:$dest_path/amitools/bin",
   }
 }
