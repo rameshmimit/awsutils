@@ -12,8 +12,16 @@
 #
 # Requires: see Modulefile
 #
-# Sample Usage: include awsutils
-#
+# Sample Usage: 
+# class awsutils {
+  #  $ec2_api_tools  = 'ec2-api-tools.zip'
+  #  $ec2_ami_tools  = 'ec2-ami-tools.zip'
+  #  $download_url   = 'http://s3.amazonaws.com/ec2-downloads/'
+  #  $dest_path      = '/opt/aws'
+  #  $aws_access_key = 'BKLJJVVVCC444574F4CIN'
+  #  $aws_access_key = 'Abcdde34567890ksjhdanska45jk'  
+# }
+
 class awsutils (
   $ec2_api_tools  = $awsutils::params::ec2_api_tools,
   $ec2_ami_tools  = $awsutils::params::ec2_ami_tools,
