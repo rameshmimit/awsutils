@@ -38,24 +38,24 @@ class awsutils (
     ensure => installed,
   } 
   file { "$dest_path":
-    ensure => directory,
+    ensure => 'directory',
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
   }
-  exec { "get_aws_utils":
-    path    => "/usr/local/bin:/bin:/usr/bin",
-    cwd     => "/tmp/",
+  exec { 'get_aws_utils':
+    path    => '/usr/local/bin:/bin:/usr/bin',
+    cwd     => '/tmp/',
     command => "touch /tmp/placehodler && wget $ec2_api_tools_source $ec2_ami_tools_source && unzip 'ec2-*-tools.zip' && rm -rf 'ec2-*-tools.zip' && mv ec2-a* $dest_path",
     onlyif  => ["test  ! -f /tmp/aws_placehodler"],
   }
   file { "$dest_path/apitools":
-    ensure  => link,
+    ensure  => 'link',
     target  => "$dest_path/ec2-api-tools-1.7.4.0",
     require => File["$dest_path"],
   }
   file { "$dest_path/amitools":
-    ensure  => link,
+    ensure  => 'link',
     target  => "$dest_path/ec2-ami-tools-1.5.7",
     require => File["$dest_path"],
   }
